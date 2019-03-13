@@ -1,0 +1,22 @@
+{
+  "name": "eq-author-data",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-cache-inmemory": "latest",
+    "apollo-client": "latest",
+    "apollo-link-http": "latest",
+    "chalk": "latest",
+    "graphql": "latest",
+    "graphql-tag": "latest",
+    "json-stable-stringify": "latest",
+    "node-fetch": "latest"
+  },
+  "devDependencies": {
+    "prettier": "latest"
+  },
+  "scripts": {
+    "export": "node dumpQuestionnaires.js"
+  }
+}
