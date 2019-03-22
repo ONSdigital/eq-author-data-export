@@ -17,7 +17,7 @@ An utility for exporting Author questionnaires from an environment.
 ```
 
 where:
-  - `X` is the URL of the GraphQL API.
-  - `Y` is your own authentication token, and
+  - `X` is the URL of the GraphQL API, and
+  - `Y` is your own authentication token.
 
 This should export all questionnaires into a timestamped directory.
