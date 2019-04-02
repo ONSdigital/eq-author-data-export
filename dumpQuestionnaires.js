@@ -4,6 +4,8 @@ const chalk = require("chalk");
 const dumpQuestionnaireQuery = require("./dumpQuestionnaireQuery");
 const stringify = require("json-stable-stringify");
 
+require('dotenv').config()
+
 const _fs = require("fs");
 const fs = _fs.promises;
 
