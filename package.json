@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "latest",
+    "dotenv": "latest",
     "graphql": "latest",
     "graphql-request": "latest",
     "graphql-tag": "latest",
