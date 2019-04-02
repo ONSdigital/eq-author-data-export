@@ -4,11 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "apollo-cache-inmemory": "latest",
-    "apollo-client": "latest",
-    "apollo-link-http": "latest",
     "chalk": "latest",
     "graphql": "latest",
+    "graphql-request": "latest",
     "graphql-tag": "latest",
     "json-stable-stringify": "latest",
     "node-fetch": "latest"

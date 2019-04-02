@@ -1,11 +1,5 @@
-const { ApolloClient } = require("apollo-client");
-const {
-  InMemoryCache,
-  IntrospectionFragmentMatcher
-} = require("apollo-cache-inmemory");
-const fetch = require("node-fetch");
+const { GraphQLClient } = require("graphql-request");
 const gql = require("graphql-tag");
-const { createHttpLink } = require("apollo-link-http");
 const chalk = require("chalk");
 const dumpQuestionnaireQuery = require("./dumpQuestionnaireQuery");
 const stringify = require("json-stable-stringify");
@@ -32,32 +26,23 @@ const uri = process.env.GRAPHQL_API_URL;
 const env = uri.match(/\/\/(\w+)\-/)[1];
 
 const dumpQuestionnaires = async () => {
-  const fragmentMatcher = new IntrospectionFragmentMatcher({
-    introspectionQueryResultData
+  const client = new GraphQLClient(uri, {
+    headers: {
+      authorization: `Bearer ${process.env.AUTH_TOKEN}`
+    }
   });
 
-  const client = new ApolloClient({
-    link: createHttpLink({
-      uri,
-      headers: {
-        authorization: `Bearer ${process.env.AUTH_TOKEN}`
-      },
-      fetch
-    }),
-    cache: new InMemoryCache({ fragmentMatcher })
-  });
-
-  const result = await client.query({
-    query: gql`
+  const result = await client.request(
+    gql`
       query GetQuestionnaires {
         questionnaires {
           id
         }
       }
     `
-  });
+  );
 
-  const { questionnaires } = result.data;
+  const { questionnaires } = result;
 
   console.log(
     chalk.blue(
@@ -71,27 +56,13 @@ const dumpQuestionnaires = async () => {
     const path = `${outputDirectory}/${questionnaire.id}.json`;
 
     try {
-      let dumpResult = await client.query({
-        query: dumpQuestionnaireQuery,
-        variables: {
-          questionnaireId: questionnaire.id
-        }
+      const dumpResult = await client.request(dumpQuestionnaireQuery, {
+        questionnaireId: questionnaire.id
       });
-
-      if (dumpResult.errors) {
-        console.log(
-          chalk.red(
-            `Error exporting questionnaire with Id ${questionnaire.id}}.`
-          )
-        );
-        console.error(chalk.red(dumpResult.errors));
-        await fs.writeFile(path, stringify(dumpResult.errors, { space: 4 }));
-        return;
-      }
 
       await fs.writeFile(
         path,
-        stringify(dumpResult.data.questionnaire, { space: 4 })
+        stringify(dumpResult.questionnaire, { space: 4 })
       );
 
       console.log(
